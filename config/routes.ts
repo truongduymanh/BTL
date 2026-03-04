@@ -1,4 +1,5 @@
 ﻿export default [
+	// ================= USER =================
 	{
 		path: '/user',
 		layout: false,
@@ -16,26 +17,28 @@
 		],
 	},
 
-	///////////////////////////////////
-	// DEFAULT MENU
+	// ================= DEFAULT MENU =================
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: './TrangChu',
 		icon: 'HomeOutlined',
+		component: './TrangChu',
 	},
+
 	{
 		path: '/gioi-thieu',
 		name: 'About',
 		component: './TienIch/GioiThieu',
 		hideInMenu: true,
 	},
+
 	{
 		path: '/random-user',
 		name: 'RandomUser',
-		component: './RandomUser',
 		icon: 'ArrowsAltOutlined',
+		component: './RandomUser',
 	},
+
 	{
 		path: '/todo-list',
 		name: 'TodoList',
@@ -43,45 +46,59 @@
 		component: './TodoList',
 	},
 
-	// DANH MUC HE THONG
-	// {
-	// 	name: 'DanhMuc',
-	// 	path: '/danh-muc',
-	// 	icon: 'copy',
-	// 	routes: [
-	// 		{
-	// 			name: 'ChucVu',
-	// 			path: 'chuc-vu',
-	// 			component: './DanhMuc/ChucVu',
-	// 		},
-	// 	],
-	// },
-
+	// ================= THUC HANH 01 =================
 	{
-		path: '/notification',
+		name: 'TH01',
+		path: '/th01',
+		icon: 'CodeOutlined',
 		routes: [
 			{
-				path: './subscribe',
+				name: 'Bài 1 - Game đoán số',
+				path: 'bai-1',
+				component: './TH01/Bai1',
+			},
+		],
+	},
+
+	// ================= THUC HANH 02 =================
+	{
+		name: 'TH02',
+		path: '/th02',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				name: 'Bài 2 - Quản lý học tập',
+				path: 'bai-2',
+				component: './TH02/Bai2',
+			},
+		],
+	},
+
+	// ================= NOTIFICATION =================
+	{
+		path: '/notification',
+		layout: false,
+		hideInMenu: true,
+		routes: [
+			{
+				path: '/notification/subscribe',
 				exact: true,
 				component: './ThongBao/Subscribe',
 			},
 			{
-				path: './check',
+				path: '/notification/check',
 				exact: true,
 				component: './ThongBao/Check',
 			},
 			{
-				path: './',
+				path: '/notification',
 				exact: true,
 				component: './ThongBao/NotifOneSignal',
 			},
 		],
-		layout: false,
-		hideInMenu: true,
 	},
-	{
-		path: '/',
-	},
+
+	// ================= EXCEPTION =================
 	{
 		path: '/403',
 		component: './exception/403/403Page',
