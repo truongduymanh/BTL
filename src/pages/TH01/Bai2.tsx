@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Tabs,
   Card,
@@ -17,29 +17,53 @@ import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 
-/* ===== LocalStorage ===== */
-const getLocal = (key, defaultValue) => {
+/* ================= TYPES ================= */
+
+type Subject = {
+  id: number;
+  name: string;
+};
+
+type Schedule = {
+  id: number;
+  subjectId: number;
+  datetime: string;
+  duration: number;
+  content: string;
+  note: string;
+};
+
+type Goal = {
+  month?: string;
+  totalGoal?: number;
+};
+
+/* ================= LOCAL STORAGE ================= */
+
+const getLocal = (key: string, defaultValue: any) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : defaultValue;
 };
 
 export default function Bai2() {
   /* ================= STATE ================= */
-  const [subjects, setSubjects] = useState(getLocal("subjects", []));
-  const [schedules, setSchedules] = useState(getLocal("schedules", []));
-  const [goals, setGoals] = useState(getLocal("goals", {}));
+
+  const [subjects, setSubjects] = useState<Subject[]>(getLocal("subjects", []));
+  const [schedules, setSchedules] = useState<Schedule[]>(getLocal("schedules", []));
+  const [goals, setGoals] = useState<Goal>(getLocal("goals", {}));
 
   const [subjectModal, setSubjectModal] = useState(false);
   const [scheduleModal, setScheduleModal] = useState(false);
 
-  const [editingSubject, setEditingSubject] = useState(null);
-  const [editingSchedule, setEditingSchedule] = useState(null);
+  const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
+  const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
 
   const [subjectForm] = Form.useForm();
   const [scheduleForm] = Form.useForm();
   const [goalForm] = Form.useForm();
 
   /* ================= SAVE LOCAL ================= */
+
   useEffect(() => {
     localStorage.setItem("subjects", JSON.stringify(subjects));
   }, [subjects]);
@@ -61,27 +85,26 @@ export default function Bai2() {
   };
 
   const handleSaveSubject = async () => {
-    try {
-      const values = await subjectForm.validateFields();
+    const values = await subjectForm.validateFields();
 
-      if (editingSubject) {
-        setSubjects(
-          subjects.map((s) =>
-            s.id === editingSubject.id ? { ...s, name: values.name } : s
-          )
-        );
-      } else {
-        setSubjects([...subjects, { id: Date.now(), name: values.name }]);
-      }
+    if (editingSubject) {
+      setSubjects(
+        subjects.map((s) =>
+          s.id === editingSubject.id ? { ...s, name: values.name } : s
+        )
+      );
+    } else {
+      setSubjects([...subjects, { id: Date.now(), name: values.name }]);
+    }
 
-      subjectForm.resetFields();
-      setEditingSubject(null);
-      setSubjectModal(false);
-      message.success("Lưu môn học thành công");
-    } catch {}
+    setSubjectModal(false);
+    subjectForm.resetFields();
+    setEditingSubject(null);
+
+    message.success("Lưu môn học thành công");
   };
 
-  const deleteSubject = (id) => {
+  const deleteSubject = (id: number) => {
     setSubjects(subjects.filter((s) => s.id !== id));
     setSchedules(schedules.filter((s) => s.subjectId !== id));
     message.success("Đã xóa môn học");
@@ -94,42 +117,40 @@ export default function Bai2() {
       message.warning("Vui lòng thêm môn học trước");
       return;
     }
+
     setEditingSchedule(null);
     scheduleForm.resetFields();
     setScheduleModal(true);
   };
 
   const handleSaveSchedule = async () => {
-    try {
-      const values = await scheduleForm.validateFields();
+    const values = await scheduleForm.validateFields();
 
-      const newData = {
-        id: editingSchedule ? editingSchedule.id : Date.now(),
-        subjectId: values.subjectId,
-        datetime: values.datetime.format(),
-        duration: values.duration,
-        content: values.content,
-        note: values.note,
-      };
+    const newData: Schedule = {
+      id: editingSchedule ? editingSchedule.id : Date.now(),
+      subjectId: values.subjectId,
+      datetime: values.datetime.format(),
+      duration: values.duration,
+      content: values.content || "",
+      note: values.note || "",
+    };
 
-      if (editingSchedule) {
-        setSchedules(
-          schedules.map((s) =>
-            s.id === editingSchedule.id ? newData : s
-          )
-        );
-      } else {
-        setSchedules([...schedules, newData]);
-      }
+    if (editingSchedule) {
+      setSchedules(
+        schedules.map((s) => (s.id === editingSchedule.id ? newData : s))
+      );
+    } else {
+      setSchedules([...schedules, newData]);
+    }
 
-      scheduleForm.resetFields();
-      setEditingSchedule(null);
-      setScheduleModal(false);
-      message.success("Lưu lịch học thành công");
-    } catch {}
+    setScheduleModal(false);
+    scheduleForm.resetFields();
+    setEditingSchedule(null);
+
+    message.success("Lưu lịch học thành công");
   };
 
-  const deleteSchedule = (id) => {
+  const deleteSchedule = (id: number) => {
     setSchedules(schedules.filter((s) => s.id !== id));
     message.success("Đã xóa lịch học");
   };
@@ -137,16 +158,14 @@ export default function Bai2() {
   /* ================= GOAL ================= */
 
   const handleSaveGoal = async () => {
-    try {
-      const values = await goalForm.validateFields();
+    const values = await goalForm.validateFields();
 
-      setGoals({
-        month: values.month.format("YYYY-MM"),
-        totalGoal: values.totalGoal,
-      });
+    setGoals({
+      month: values.month.format("YYYY-MM"),
+      totalGoal: values.totalGoal,
+    });
 
-      message.success("Lưu mục tiêu thành công");
-    } catch {}
+    message.success("Lưu mục tiêu thành công");
   };
 
   const totalHours = schedules
@@ -163,7 +182,7 @@ export default function Bai2() {
     { title: "Tên môn học", dataIndex: "name" },
     {
       title: "Hành động",
-      render: (_, record) => (
+      render: (_: any, record: Subject) => (
         <Space>
           <Button
             type="primary"
@@ -175,6 +194,7 @@ export default function Bai2() {
           >
             Sửa
           </Button>
+
           <Button danger onClick={() => deleteSubject(record.id)}>
             Xóa
           </Button>
@@ -186,20 +206,20 @@ export default function Bai2() {
   const scheduleColumns = [
     {
       title: "Môn học",
-      render: (_, record) =>
-        subjects.find((s) => s.id === record.subjectId)?.name,
+      render: (_: any, record: Schedule) =>
+        subjects.find((s) => s.id === record.subjectId)?.name || "",
     },
     {
       title: "Thời gian",
-      render: (_, r) =>
+      render: (_: any, r: Schedule) =>
         dayjs(r.datetime).format("DD/MM/YYYY HH:mm"),
     },
-    { title: "Thời lượng (giờ)", dataIndex: "duration" },
+    { title: "Thời lượng", dataIndex: "duration" },
     { title: "Nội dung", dataIndex: "content" },
     { title: "Ghi chú", dataIndex: "note" },
     {
       title: "Hành động",
-      render: (_, record) => (
+      render: (_: any, record: Schedule) => (
         <Space>
           <Button
             type="primary"
@@ -214,6 +234,7 @@ export default function Bai2() {
           >
             Sửa
           </Button>
+
           <Button danger onClick={() => deleteSchedule(record.id)}>
             Xóa
           </Button>
@@ -225,13 +246,14 @@ export default function Bai2() {
   /* ================= UI ================= */
 
   return (
-    <Card title="QUẢN LÝ HỌC TẬP">
+    <Card title="Quản lý học tập">
       <Tabs defaultActiveKey="1">
 
         <TabPane tab="Danh mục môn học" key="1">
           <Button type="primary" onClick={handleAddSubject}>
             + Thêm môn học
           </Button>
+
           <Table
             columns={subjectColumns}
             dataSource={subjects}
@@ -244,6 +266,7 @@ export default function Bai2() {
           <Button type="primary" onClick={handleAddSchedule}>
             + Thêm lịch học
           </Button>
+
           <Table
             columns={scheduleColumns}
             dataSource={schedules}
@@ -253,7 +276,9 @@ export default function Bai2() {
         </TabPane>
 
         <TabPane tab="Mục tiêu tháng" key="3">
+
           <Form form={goalForm} layout="vertical">
+
             <Form.Item
               name="month"
               label="Chọn tháng"
@@ -273,6 +298,7 @@ export default function Bai2() {
             <Button type="primary" onClick={handleSaveGoal}>
               Lưu mục tiêu
             </Button>
+
           </Form>
 
           {goals.month && (
@@ -280,29 +306,32 @@ export default function Bai2() {
               <p>Tháng: {goals.month}</p>
               <p>Tổng giờ đã học: {totalHours}</p>
               <p>
-                Trạng thái:{" "}
-                {totalHours >= goals.totalGoal
-                  ? "✅ Đã đạt"
-                  : "❌ Chưa đạt"}
+                Trạng thái:
+                {totalHours >= (goals.totalGoal || 0)
+                  ? " ✅ Đã đạt"
+                  : " ❌ Chưa đạt"}
               </p>
             </Card>
           )}
+
         </TabPane>
 
       </Tabs>
 
       {/* SUBJECT MODAL */}
+
       <Modal
         title={editingSubject ? "Sửa môn học" : "Thêm môn học"}
         visible={subjectModal}
         onOk={handleSaveSubject}
         onCancel={() => {
+          setSubjectModal(false);
           subjectForm.resetFields();
           setEditingSubject(null);
-          setSubjectModal(false);
         }}
       >
         <Form form={subjectForm} layout="vertical">
+
           <Form.Item
             name="name"
             label="Tên môn học"
@@ -310,21 +339,24 @@ export default function Bai2() {
           >
             <Input />
           </Form.Item>
+
         </Form>
       </Modal>
 
       {/* SCHEDULE MODAL */}
+
       <Modal
         title={editingSchedule ? "Sửa lịch học" : "Thêm lịch học"}
         visible={scheduleModal}
         onOk={handleSaveSchedule}
         onCancel={() => {
+          setScheduleModal(false);
           scheduleForm.resetFields();
           setEditingSchedule(null);
-          setScheduleModal(false);
         }}
       >
         <Form form={scheduleForm} layout="vertical">
+
           <Form.Item
             name="subjectId"
             label="Môn học"
@@ -362,6 +394,7 @@ export default function Bai2() {
           <Form.Item name="note" label="Ghi chú">
             <Input />
           </Form.Item>
+
         </Form>
       </Modal>
     </Card>
