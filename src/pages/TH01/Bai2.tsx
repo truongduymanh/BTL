@@ -17,14 +17,13 @@ import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 
-/* ===== LocalStorage ===== */
 const getLocal = (key, defaultValue) => {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : defaultValue;
 };
 
 export default function Bai2() {
-  /* ================= STATE ================= */
+
   const [subjects, setSubjects] = useState(getLocal("subjects", []));
   const [schedules, setSchedules] = useState(getLocal("schedules", []));
   const [goals, setGoals] = useState(getLocal("goals", {}));
@@ -39,7 +38,6 @@ export default function Bai2() {
   const [scheduleForm] = Form.useForm();
   const [goalForm] = Form.useForm();
 
-  /* ================= SAVE LOCAL ================= */
   useEffect(() => {
     localStorage.setItem("subjects", JSON.stringify(subjects));
   }, [subjects]);
@@ -52,7 +50,6 @@ export default function Bai2() {
     localStorage.setItem("goals", JSON.stringify(goals));
   }, [goals]);
 
-  /* ================= SUBJECT ================= */
 
   const handleAddSubject = () => {
     setEditingSubject(null);
@@ -87,7 +84,6 @@ export default function Bai2() {
     message.success("Đã xóa môn học");
   };
 
-  /* ================= SCHEDULE ================= */
 
   const handleAddSchedule = () => {
     if (subjects.length === 0) {
@@ -134,7 +130,6 @@ export default function Bai2() {
     message.success("Đã xóa lịch học");
   };
 
-  /* ================= GOAL ================= */
 
   const handleSaveGoal = async () => {
     try {
@@ -157,7 +152,6 @@ export default function Bai2() {
     )
     .reduce((sum, s) => sum + s.duration, 0);
 
-  /* ================= TABLE ================= */
 
   const subjectColumns = [
     { title: "Tên môn học", dataIndex: "name" },
@@ -221,8 +215,6 @@ export default function Bai2() {
       ),
     },
   ];
-
-  /* ================= UI ================= */
 
   return (
     <Card title="QUẢN LÝ HỌC TẬP">
@@ -291,7 +283,7 @@ export default function Bai2() {
 
       </Tabs>
 
-      {/* SUBJECT MODAL */}
+      {}
       <Modal
         title={editingSubject ? "Sửa môn học" : "Thêm môn học"}
         visible={subjectModal}
@@ -313,7 +305,7 @@ export default function Bai2() {
         </Form>
       </Modal>
 
-      {/* SCHEDULE MODAL */}
+      {}
       <Modal
         title={editingSchedule ? "Sửa lịch học" : "Thêm lịch học"}
         visible={scheduleModal}
