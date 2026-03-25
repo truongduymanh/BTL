@@ -45,7 +45,6 @@ export default function Bai2() {
     localStorage.setItem("questions", JSON.stringify(questions));
   }, [blocks, subjects, questions]);
 
-  /* BLOCK */
 
   const addBlock = async () => {
     const v = await form.validateFields();
@@ -56,7 +55,6 @@ export default function Bai2() {
     form.resetFields();
   };
 
-  /* SUBJECT */
 
   const addSubject = async () => {
     const v = await subjectForm.validateFields();
@@ -75,7 +73,6 @@ export default function Bai2() {
     subjectForm.resetFields();
   };
 
-  /* QUESTION */
 
   const addQuestion = async () => {
     const v = await questionForm.validateFields();
@@ -95,7 +92,6 @@ export default function Bai2() {
     questionForm.resetFields();
   };
 
-  /* CREATE EXAM */
 
   const createExam = async () => {
     const v = await examForm.validateFields();
@@ -125,7 +121,6 @@ export default function Bai2() {
     message.success("Tạo đề thành công");
   };
 
-  /* TABLE */
 
   const blockColumns = [
     {
@@ -254,7 +249,7 @@ export default function Bai2() {
 
       </Tabs>
 
-      {/* MODAL BLOCK */}
+      {}
 
       <Modal
         title="Thêm khối kiến thức"
@@ -269,7 +264,7 @@ export default function Bai2() {
         </Form>
       </Modal>
 
-      {/* MODAL SUBJECT */}
+      {}
 
       <Modal
         title="Thêm môn học"
@@ -294,7 +289,7 @@ export default function Bai2() {
         </Form>
       </Modal>
 
-      {/* MODAL QUESTION */}
+      {}
 
       <Modal
         title="Thêm câu hỏi"
