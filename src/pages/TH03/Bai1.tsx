@@ -22,7 +22,6 @@ export default function Bai1() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
 
-  // ===== EMPLOYEE =====
   const saveEmployee = () => {
     if (!empName) return alert('Nhập tên');
     if (editEmpId) {
@@ -44,7 +43,6 @@ export default function Bai1() {
 
   const deleteEmployee = (id) => setEmployees(employees.filter(e => e.id !== id));
 
-  // ===== SERVICE =====
   const saveService = () => {
     if (!serviceName) return alert('Nhập tên DV');
     if (editServiceId) {
@@ -65,7 +63,6 @@ export default function Bai1() {
 
   const deleteService = (id) => setServices(services.filter(s => s.id !== id));
 
-  // ===== APPOINTMENT =====
   const isConflict = () => appointments.some(a => a.empId == empId && a.date === date && a.time === time && a.status !== 'cancelled');
 
   const addAppointment = () => {
@@ -78,7 +75,6 @@ export default function Bai1() {
     setAppointments(appointments.map(a => a.id === id ? { ...a, status } : a));
   };
 
-  // ===== REVIEW =====
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(5);
@@ -99,7 +95,7 @@ export default function Bai1() {
     return (empReviews.reduce((s, r) => s + r.rating, 0) / empReviews.length).toFixed(1);
   };
 
-  // ===== STATS =====
+
   const today = new Date().toISOString().slice(0,10);
   const month = today.slice(0,7);
 
@@ -117,7 +113,7 @@ export default function Bai1() {
     <div style={{ padding: 20, maxWidth: 900, margin: 'auto' }}>
       <h2 style={{ textAlign: 'center' }}>Quản lý đặt lịch</h2>
 
-      {/* EMPLOYEES */}
+      {}
       <div style={{ border: '1px solid #ccc', padding: 12, marginBottom: 20 }}>
         <h3>Nhân viên</h3>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -141,7 +137,7 @@ export default function Bai1() {
         </div>
       </div>
 
-      {/* SERVICES */}
+      {}
       <div style={{ border: '1px solid #ccc', padding: 12, marginBottom: 20 }}>
         <h3>Dịch vụ</h3>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -162,7 +158,7 @@ export default function Bai1() {
         </div>
       </div>
 
-      {/* APPOINTMENTS */}
+      {}
       <div style={{ border: '1px solid #ccc', padding: 12 }}>
         <h3>Đặt lịch</h3>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -193,7 +189,7 @@ export default function Bai1() {
           ))}
         </div>
       </div>
-          {/* REVIEW */}
+          {}
       <div style={{ border: '1px solid #ccc', padding: 12, marginTop: 20 }}>
         <h3>Đánh giá</h3>
         {appointments.filter(a => a.status === 'completed').map(a => (
@@ -214,7 +210,7 @@ export default function Bai1() {
         ))}
       </div>
 
-      {/* AVG */}
+      {}
       <div>
         <h3>ĐTB nhân viên</h3>
         {employees.map(e => (
@@ -222,7 +218,7 @@ export default function Bai1() {
         ))}
       </div>
 
-      {/* STATS */}
+      {}
       <div>
         <h3>Thống kê</h3>
         <div>Ngày: {totalDay}</div>
